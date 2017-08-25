@@ -1,0 +1,20 @@
+.App {
+}
+
+div.options {
+  text-align: center;
+}
+
+div.content {
+  display: table;
+}
+
+textarea.fields {
+    min-width: 300px;
+    min-height: 200px;
+    display: table-cell;
+}
+
+div.viewport {
+  display: table-cell;
+}

@@ -1,0 +1,12 @@
+.dropdown {
+  margin: 0.1em;
+  font-size: 1em;
+  padding: 0.5em;
+  border-radius: 10px;
+  background-color: #0fbfd6;
+  text-transform: uppercase;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 8px 1px #bbb;
+  max-width: 400px;
+}
