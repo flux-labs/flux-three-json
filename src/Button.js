@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import './Button.css';
 
 class Button extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         if (!this._span) return;

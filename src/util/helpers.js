@@ -68,7 +68,7 @@ function getCell(project, cell) {
 /**
  * Create a project cell (key) in Flux.
  */
-function createCell(project, name) {
+export function createCell(project, name) {
   let dt = getDataTable(project).table
   return dt.createCell(name, {description: name, value: ''})
 }
@@ -92,7 +92,7 @@ export function updateCellValue(project, cell, value) {
  * Creates a websocket for a project that listens for data table events, and calls
  * the supplied handler function
  */
-function createWebSocket(project, notificationHandler){
+export function createWebSocket(project, notificationHandler){
   let dataTable = getDataTable(project)
   let options = {
     onOpen: function() { console.log('Websocket opened.') },
@@ -109,4 +109,9 @@ function createWebSocket(project, notificationHandler){
     if(notificationHandler)
       dataTable.table.addWebSocketHandler(notificationHandler)
   }
+}
+
+export function getFluxToken() {
+  var fluxData = JSON.parse(localStorage.getItem("__FLUX__"));
+  return fluxData.credentials.fluxToken;
 }

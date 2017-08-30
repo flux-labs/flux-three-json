@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
-import * as THREE from 'three';
+// import * as THREE from 'three';
 import FluxViewport from 'flux-viewport/dist/flux-viewport.common.js';
 import Button from './Button';
 import * as helpers from './util/helpers.js';
@@ -22,6 +21,7 @@ class App extends Component {
       projects: [],
       keys: [],
       data: JSON.stringify(sphere),
+      dataThree: '',
       image: ''
     };
     this.projectMap = {};
@@ -46,10 +46,18 @@ class App extends Component {
   {
     if (div == null || this.viewportDiv != null) return;
     this.viewportDiv = div;
-    console.log("VP set");
-    this.vp = new FluxViewport(div);
+    var token = "";
+    this.div = div;
+    this.vp = null;
+    // Just stash the div container for the viewport so we can later
+    // intialize the viewport with project set once it is available
+
+    // Set up the FluxViewport in it's container
+    var token = helpers.getFluxToken();
+    this.vp = new FluxViewport(this.div, {projectId: this.project.id, token: token});
     var sphere = JSON.parse(this.state.data);
-    this.vp.setGeometryEntity(sphere);
+    // this.vp.setGeometryEntity(sphere);
+    this.updateViewport(sphere);
   }
 
   updateViewport(json) {
@@ -57,8 +65,11 @@ class App extends Component {
     if (!FluxViewport.isKnownGeom(json)) {
       data = sphere;
     }
+
     this.vp.setGeometryEntity(data).then((result)=>{
       this.vp.focus();
+      //this.vp._renderer._scene
+      this.setState({dataThree: JSON.stringify(result.getObject())});
     });
   }
   _onLogin() {
@@ -85,7 +96,7 @@ class App extends Component {
   }
 
   _stashValue() {
-    if (this.value == null || this.value.constructor != Array) return;
+    if (this.value == null || this.value.constructor !== Array) return;
     this.entityMap = {};
     for (let i=0;i<this.value.length;i++) {
       var value = this.value[i];
@@ -122,7 +133,39 @@ class App extends Component {
         </div>);
     }
   }
+  _getContent() {
+    if (this.project != null) {
+      return (<table className="content">
+        <tbody>
+          <tr>
+            <td>
+              Flux JSON
+            </td>
+            <td>
+              Flux Viewport (three.js)
+            </td>
+            <td>
+              three.js JSON
+            </td>
+          </tr>
 
+          <tr>
+            <td>
+              <textarea id="data" className="fields" type="text" onChange={(e)=>{this._handleDataChange(e)}} value={this.state.data} ref={(area)=>{this._comment = area;}} name="Data"></textarea><br/>
+            </td>
+            <td>
+              <div className="viewport" ref={this.setViewport.bind(this)}></div>
+            </td>
+            <td>
+              <textarea id="dataThree" className="fields" readOnly="true" value={this.state.dataThree} ></textarea><br/>
+            </td>
+          </tr>
+        </tbody>
+      </table>);
+    } else {
+      return <table className="content"></table>
+    }
+  }
   // Function to update react state to match what is in the text box
   // Prevents clobbering of user input by react
   _handleDataChange(e) {
@@ -133,11 +176,7 @@ class App extends Component {
     return (
       <div className="App">
           {this._getOptions()}
-          <div className="content">
-            <textarea id="data" className="fields" type="text" onChange={(e)=>{this._handleDataChange(e)}} value={this.state.data} ref={(area)=>{this._comment = area;}} name="Data"></textarea><br/>
-            <div className="viewport" ref={this.setViewport.bind(this)}></div>
-          </div>
-
+          {this._getContent()}
       </div>
     );
   }
