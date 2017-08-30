@@ -48,15 +48,11 @@ class App extends Component {
     this.viewportDiv = div;
     var token = "";
     this.div = div;
-    this.vp = null;
-    // Just stash the div container for the viewport so we can later
-    // intialize the viewport with project set once it is available
 
     // Set up the FluxViewport in it's container
     var token = helpers.getFluxToken();
     this.vp = new FluxViewport(this.div, {projectId: this.project.id, token: token});
     var sphere = JSON.parse(this.state.data);
-    // this.vp.setGeometryEntity(sphere);
     this.updateViewport(sphere);
   }
 
