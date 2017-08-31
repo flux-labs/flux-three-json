@@ -46,7 +46,6 @@ class App extends Component {
   {
     if (div == null || this.viewportDiv != null) return;
     this.viewportDiv = div;
-    var token = "";
     this.div = div;
 
     // Set up the FluxViewport in it's container
